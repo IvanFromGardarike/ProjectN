@@ -8,10 +8,10 @@ public class PlayerMovement : MonoBehaviour
     Vector3 cursorPos;
 
     [SerializeField]
-    float speed = 10;
+    float speed;
     bool ismoving = false;
 
-    
+    int a = 0;
 
     void Start()
     {
@@ -25,22 +25,32 @@ public class PlayerMovement : MonoBehaviour
     }
     void Movement()
     {
-        cursorPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         if (Input.GetButtonDown("Fire1"))
         {
-            while (cursorPos.x > transform.position.x);
-            {
+            ismoving = true;
+            cursorPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            ismoving = false;
+        }
+        if(ismoving)
+        {
+            if(cursorPos.x > transform.position.x)
                 transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, 0, 0);
-                print(cursorPos.x);
-            }
-            //transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, 0, 0);
+            else if(Mathf.Approximately(cursorPos.x, transform.position.x))
+                ismoving = false;
+            else if(cursorPos.x < transform.position.x)
+                transform.position = new Vector3(transform.position.x - speed * Time.deltaTime, 0, 0);
+            else
+                ismoving = false;
         }
     }
     void Debug()
     {
         if(Input.GetKeyDown(KeyCode.D))
         {
-            print(cursorPos.x);
+            print(speed);
         }
     }
 }
