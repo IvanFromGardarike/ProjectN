@@ -9,9 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     float speed;
-    bool ismoving = false;
-
-    int a = 0;
+    public static bool ismoving = false;
 
     void Start()
     {
@@ -20,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Debug();
+        debugMethod();
         Movement();
     }
     void Movement()
@@ -36,21 +34,25 @@ public class PlayerMovement : MonoBehaviour
         }
         if(ismoving)
         {
-            if(cursorPos.x > transform.position.x)
-                transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, 0, 0);
-            else if(Mathf.Approximately(cursorPos.x, transform.position.x))
-                ismoving = false;
-            else if(cursorPos.x < transform.position.x)
-                transform.position = new Vector3(transform.position.x - speed * Time.deltaTime, 0, 0);
+            float distance = Mathf.Sqrt(Mathf.Pow(cursorPos.x - transform.position.x, 2));
+            if(distance > 0.1f)
+            {
+                if(cursorPos.x > transform.position.x)
+                    transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, 
+                                                    transform.position.z);
+                else
+                    transform.position = new Vector3(transform.position.x - speed * Time.deltaTime, transform.position.y, 
+                                                    transform.position.z);
+            }
             else
                 ismoving = false;
         }
     }
-    void Debug()
+    private void debugMethod()
     {
-        if(Input.GetKeyDown(KeyCode.D))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            print(speed);
+            Debug.Log("Debug");
         }
     }
 }
